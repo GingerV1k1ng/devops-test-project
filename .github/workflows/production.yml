@@ -11,11 +11,11 @@ on:
 
 jobs:
     protect:
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'staging'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Merging to 'master' is only allowed from 'staging'
-        run: exit 1
+      if: github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'staging'
+      runs-on: ubuntu-latest
+      steps:
+        - name: Merging to 'master' is only allowed from 'staging'
+          run: exit 1
         
     build:
         runs-on: ubuntu-latest
