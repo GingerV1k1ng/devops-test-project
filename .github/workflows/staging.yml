@@ -35,9 +35,9 @@ jobs:
           run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }}
     
     test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -53,7 +53,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Build 
-        run: run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }} --build-arg SECRET_PORT=${{ secrets.SECRET_PORT }}
+        run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }} --build-arg SECRET_PORT=${{ secrets.SECRET_PORT }}
 
       - name: Start frontend and run tests
         run: |
