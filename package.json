@@ -1,0 +1,23 @@
+{
+  "name": "devops-test-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GingerV1k1ng/devops-test-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GingerV1k1ng/devops-test-project/issues"
+  },
+  "homepage": "https://github.com/GingerV1k1ng/devops-test-project#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.25.0"
+  }
+}
