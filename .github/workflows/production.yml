@@ -40,10 +40,42 @@ jobs:
         # step 4: Push Docker to Azure Registry  
         - name: Push Docker
           run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }}
+          
+    test:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Build 
+        run: docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }} --build-arg SECRET_PORT=${{ secrets.SECRET_PORT }}
+
+      - name: Start frontend and run tests
+        run: |
+          docker run -d --name webapp -p 80:80 ${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }} &
+          npm run test
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: playwright-report
+          path: playwright-report  
     
-    Deploy:
+    deploy:
         name: Deploy
-        needs: build
+        needs: [build, test]
         if: github.event_name == 'push'
         runs-on: ubuntu-latest
         steps:
