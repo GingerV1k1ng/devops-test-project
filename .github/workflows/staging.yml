@@ -67,28 +67,44 @@ jobs:
           name: playwright-report
           path: playwright-report
     
+    delete-old-container:
+      needs: [build, test]
+      runs-on: ubuntu-latest
+      steps:
+      # Checkout code
+      - uses: actions/checkout@main
+      # Log into Azure
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        # Delete container
+      - name: Delete container
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.30.0
+          inlineScript: |
+            az container delete --name staging --resource-group TestResourceGroup --yes
+    
     deploy:
         name: deploy
-        needs: [build, test]
+        needs: [build, test, delete-old-container]
         if: github.event_name == 'push'
         runs-on: ubuntu-latest
         steps:
-    
-        # step 1: Login via Azure CLI
-        - name: 'Login via Azure CLI'
-          uses: azure/login@v1
-          with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
- 
-        # step 2: Deploy to Azure Container Instances
-        - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/aci-deploy@v1'
-          with:
-            resource-group: ${{ secrets.RESOURCE_GROUP }}
-            dns-name-label: webappli
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: staging
-            location: 'northeurope'
+          # Checkout code
+          - uses: actions/checkout@main
+          # Log into Azure
+          - uses: azure/login@v1
+            with:
+              creds: ${{ secrets.AZURE_CREDENTIALS }}
+          # Deploy ARM template
+          - name: Run ARM deploy
+            uses: azure/arm-deploy@v1
+            with:
+              subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+              resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
+              template: ./azuredeploystaging.json
+              parameters: imageRegistryPassword=${{ secrets.REGISTRY_PASSWORD }}
+
+          # output containerName variable from template
+          - run: echo ${{ steps.deploy.outputs.containerName }}
