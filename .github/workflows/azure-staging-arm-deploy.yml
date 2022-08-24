@@ -19,6 +19,7 @@ jobs:
             az container delete --name staging --resource-group TestResourceGroup --yes
   
   build-and-deploy:
+    needs: delete-old-container
     runs-on: ubuntu-latest
     steps:
       # Checkout code
