@@ -11,6 +11,10 @@
             "type": "String"
         }
     },
+        "image": {
+            "defaultValue": "",
+            "type": "String"
+        }
     "variables": {},
     "resources": [
         {
@@ -24,7 +28,7 @@
                     {
                         "name": "[parameters('containerGroups_staging_name')]",
                         "properties": {
-                            "image": "testthor.azurecr.io/myimage:2902cce7032bb4659f6cc81fa9798886623ee9fd",
+                            "image": "[parameters('image')]",
                             "command": [],
                             "ports": [
                                 {
