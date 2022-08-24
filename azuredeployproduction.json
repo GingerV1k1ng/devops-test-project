@@ -10,6 +10,10 @@
         "imageRegistryPassword": {
             "defaultValue": "",
             "type": "String"
+        },
+        "image": {
+            "defaultValue": "",
+            "type": "String"
         }
     },
     "variables": {},
@@ -25,7 +29,7 @@
                     {
                         "name": "[parameters('containerGroups_production_name')]",
                         "properties": {
-                            "image": "testthor.azurecr.io/myimage:75fdda7face1e425b2814c5248f1f1fcdb3ba089",
+                            "image": "[parameters('image')]",
                             "command": [],
                             "ports": [
                                 {
