@@ -11,7 +11,6 @@ on:
 name: azure-staging-arm
 jobs:
   delete-old-container:
-    if: needs.check.outputs.run_job == 'true'
     runs-on: ubuntu-latest
     steps:
       # Checkout code
