@@ -9,12 +9,12 @@
         "imageRegistryPassword": {
             "defaultValue": "",
             "type": "String"
-        }
-    },
+        },
         "image": {
             "defaultValue": "",
             "type": "String"
         }
+    },
     "variables": {},
     "resources": [
         {
