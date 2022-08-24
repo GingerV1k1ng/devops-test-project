@@ -1,7 +1,4 @@
-FROM ubuntu
-ARG SECRET_PORT
-RUN apt-get update
-RUN apt-get install nginx -y
-COPY index.html /var/www/html/
-EXPOSE ${SECRET_PORT}
-CMD ["nginx","-g","daemon off;"]
+FROM nginx:alpine
+COPY ./dist /usr/share/nginx/html/
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY .htpasswd /etc/nginx/.htpasswd
