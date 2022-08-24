@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerGroups_production_name": {
+            "defaultValue": "production",
+            "type": "String"
+        }
+    },
+        "imageRegistryPassword": {
+            "defaultValue": "",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2021-10-01",
+            "name": "[parameters('containerGroups_production_name')]",
+            "location": "northeurope",
+            "properties": {
+                "sku": "Standard",
+                "containers": [
+                    {
+                        "name": "[parameters('containerGroups_production_name')]",
+                        "properties": {
+                            "image": "testthor.azurecr.io/myimage:75fdda7face1e425b2814c5248f1f1fcdb3ba089",
+                            "command": [],
+                            "ports": [
+                                {
+                                    "protocol": "TCP",
+                                    "port": 80
+                                }
+                            ],
+                            "environmentVariables": [],
+                            "resources": {
+                                "requests": {
+                                    "memoryInGB": 1.5,
+                                    "cpu": 1
+                                }
+                            }
+                        }
+                    }
+                ],
+                "initContainers": [],
+                "imageRegistryCredentials": [
+                    {
+                        "server": "testthor.azurecr.io",
+                        "username": "55fc45f7-3fc9-42da-9e6a-29dad5aed2fa",
+                        "password": "[parameters('imageRegistryPassword')]"
+                    }
+                ],
+                "restartPolicy": "Always",
+                "ipAddress": {
+                    "ports": [
+                        {
+                            "protocol": "TCP",
+                            "port": 80
+                        }
+                    ],
+                    "ip": "20.13.242.131",
+                    "type": "Public",
+                    "dnsNameLabel": "TestResourceGroup13"
+                },
+                "osType": "Linux"
+            }
+        }
+    ]
+}
