@@ -35,8 +35,8 @@
                             "environmentVariables": [],
                             "resources": {
                                 "requests": {
-                                    "memoryInGB": 2,
-                                    "cpu": 2
+                                    "memoryInGB": 1.5,
+                                    "cpu": 1
                                 }
                             }
                         }
