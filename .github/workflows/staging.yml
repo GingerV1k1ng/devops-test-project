@@ -104,7 +104,7 @@ jobs:
               subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
               resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
               template: ./azuredeploystaging.json
-              parameters: imageRegistryPassword=${{ secrets.REGISTRY_PASSWORD }}
+              parameters: imageRegistryPassword=${{ secrets.REGISTRY_PASSWORD }}, image=${{ secrets.REGISTRY_LOGIN_SERVER}}/myimage:${{ github.sha }}
 
           # output containerName variable from template
           - run: echo ${{ steps.deploy.outputs.containerName }}
